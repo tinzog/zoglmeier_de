@@ -27,32 +27,7 @@ python3 -m http.server 8000 --directory public
 Jeder Push auf `main`, der etwas unter `public/` ändert, startet den Workflow **Deploy to netcup**. Er lädt die geänderten
 Dateien per FTPS (FTP über TLS) hoch. Manuell starten geht über *Actions → Deploy to netcup → Run workflow*.
 
-### Einmalige Einrichtung
-
-1. **Neues Verzeichnis für die statische Seite anlegen** (netcup WCP → Webhosting → Plesk → Dateien),
-   z. B. `/zoglmeier-static/`. So bleibt WordPress unangetastet und kann bei Bedarf zurückgeschaltet werden.
-
-2. **FTP-Zugang** in Plesk anlegen bzw. die vorhandenen Zugangsdaten nachsehen
-   (*Websites & Domains → FTP-Zugang*). Den Zugang am besten auf das neue Verzeichnis beschränken.
-
-3. **GitHub-Secrets** anlegen (Repo → *Settings → Secrets and variables → Actions → Secrets*):
-
-   | Secret         | Beispiel                       |
-   |----------------|--------------------------------|
-   | `FTP_SERVER`   | Hostname des netcup-Webspace (aus dem WCP, oder `zoglmeier.de`) |
-   | `FTP_USERNAME` | FTP-Benutzername               |
-   | `FTP_PASSWORD` | FTP-Passwort                   |
-
-4. **GitHub-Variable** anlegen (gleiche Seite, Tab *Variables*):
-
-   | Variable         | Beispiel              |
-   |------------------|-----------------------|
-   | `FTP_SERVER_DIR` | `/zoglmeier-static/` (mit Slash am Ende; relativ zum FTP-Root des Benutzers) |
-
-5. Workflow einmal manuell laufen lassen und prüfen, ob die Dateien im Verzeichnis liegen.
-
-6. **Dokumentenstamm umstellen**: Plesk → *Websites & Domains → zoglmeier.de → Hosting-Einstellungen →
-   Dokumentenstamm* auf `zoglmeier-static` setzen. Ab dann liefert zoglmeier.de die statische Seite aus.
+Benötigte Repository-Secrets: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` und `FTP_SERVER_DIR` (z. B. `zoglmeier_de/`).
 
 ### HTTPS
 

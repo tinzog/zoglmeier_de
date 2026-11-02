@@ -36,9 +36,28 @@ jobs:
             exit 1
           fi
 
-      # Uploads only changed files via FTPS (FTP over TLS). The action keeps a state file
-      # (.ftp-deploy-sync-state.json) on the server and only deletes files it uploaded itself.
+      # Uploads only changed files via FTPS (FTP over TLS). The action keeps a state file (.ftp-deploy-sync-state.json)
+      # on the server and only deletes files it uploaded itself.
       - name: Upload via FTPS
+        id: upload
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./public/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+
+      # The netcup FTP server occasionally resets the TLS data connection (ECONNRESET). Wait briefly and try once more;
+      # if this attempt fails too, the job fails.
+      - name: Wait before retry
+        if: steps.upload.outcome == 'failure'
+        run: sleep 20
+
+      - name: Upload via FTPS (retry)
+        if: steps.upload.outcome == 'failure'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}

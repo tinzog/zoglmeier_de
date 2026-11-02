@@ -24,10 +24,10 @@ python3 -m http.server 8000 --directory public
 
 ## Deployment
 
-Jeder Push auf `main`, der etwas unter `public/` ändert, startet den Workflow **Deploy to netcup**. Er lädt die geänderten
-Dateien per FTPS (FTP über TLS) hoch. Manuell starten geht über *Actions → Deploy to netcup → Run workflow*.
+Das Deployment wird nur manuell gestartet: *Actions → Deploy to netcup → Run workflow* (oder `gh workflow run deploy.yml`).
+Der Workflow lädt die geänderten Dateien aus `public/` per FTPS (FTP über TLS) hoch.
 
-Benötigte Repository-Secrets: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` und `FTP_SERVER_DIR` (z. B. `zoglmeier_de/`).
+Benötigte Repository-Secrets: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` und `FTP_SERVER_DIR` (z. B. `httpdocs/`).
 
 ### HTTPS
 
